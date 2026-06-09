@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Regex Tester — Free Online Regular Expression Tester</title>
+<meta name="description" content="Free online regex tester with live match highlighting, group extraction, and common patterns. No signup, runs entirely in your browser — your data never leaves your machine.">
+<meta name="keywords" content="regex tester, regular expression tester, regex online, regex checker, regex matcher, regex groups, regex patterns">
+<meta property="og:title" content="Regex Tester — Free Online Regular Expression Tester">
+<meta property="og:description" content="Free online regex tester with live match highlighting, group extraction, and common patterns. No signup, 100% client-side.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://regex-tester.pages.dev">
+<meta property="og:image" content="https://regex-tester.pages.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Regex Tester — Free Online Regular Expression Tester">
+<meta name="twitter:description" content="Free online regex tester with live match highlighting, group extraction, and common patterns.">
+<link rel="canonical" href="https://regex-tester.pages.dev">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"Regex Tester",
+  "description":"Free online regular expression tester with live highlighting and group extraction.",
+  "url":"https://regex-tester.pages.dev",
+  "applicationCategory":"DeveloperApplication",
+  "operatingSystem":"Any",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+  "browserRequirements":"Requires JavaScript"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Is Regex Tester free?","acceptedAnswer":{"@type":"Answer","text":"Yes, Regex Tester is completely free with no signup required. It runs entirely in your browser."}},
+    {"@type":"Question","name":"Is my data private?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. All processing happens locally in your browser. No data is sent to any server."}},
+    {"@type":"Question","name":"What regex flags are supported?","acceptedAnswer":{"@type":"Answer","text":"Regex Tester supports the g (global), i (case-insensitive), m (multiline), and s (dotAll) flags."}}
+  ]
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--green:#238636;--blue:#1f6feb;--red:#f85149;--orange:#d29922;--purple:#a371f7;--cyan:#39d353}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--border);padding:16px 0}
+header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+header h1{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:8px}
+header h1 .icon{font-size:1.5rem}
+header nav{display:flex;gap:16px;font-size:.875rem}
+main{padding:32px 0 64px}
+.tool-grid{display:grid;grid-template-columns:1fr 280px;gap:24px}
+@media(max-width:768px){.tool-grid{grid-template-columns:1fr}}
+.input-group{margin-bottom:16px}
+.input-group label{display:block;font-size:.75rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.regex-row{display:flex;gap:8px;align-items:stretch}
+.regex-row input{flex:1}
+.regex-row button{background:var(--card);border:1px solid var(--border);color:var(--dim);border-radius:6px;padding:0 12px;cursor:pointer;font-size:.8rem;white-space:nowrap;transition:color .15s,border-color .15s}
+.regex-row button:hover{color:var(--text);border-color:var(--dim)}
+.regex-row button.copied{color:var(--green);border-color:var(--green)}
+input[type=text],textarea{width:100%;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:10px 12px;font-family:'SF Mono',SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;font-size:.875rem;resize:vertical;outline:none;transition:border-color .15s}
+input[type=text]:focus,textarea:focus{border-color:var(--blue)}
+textarea{min-height:140px}
+.flags{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.flags label{display:flex;align-items:center;gap:4px;font-size:.8rem;color:var(--dim);cursor:pointer;text-transform:none;font-weight:400;letter-spacing:0}
+.flags input[type=checkbox]{accent-color:var(--blue);width:15px;height:15px}
+.error-msg{color:var(--red);font-size:.8rem;margin-top:6px;font-family:monospace}
+.results-panel{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.results-header{padding:10px 14px;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--dim);font-weight:600}
+.results-header .count{color:var(--green)}
+.highlighted{padding:14px;font-family:'SF Mono',SFMono-Regular,Consolas,'Liberation Mono',Menlo,monospace;font-size:.85rem;white-space:pre-wrap;word-break:break-all;min-height:60px;line-height:1.8}
+.highlighted mark{background:rgba(31,111,235,.3);color:var(--text);border-radius:2px;padding:1px 0;border-bottom:2px solid var(--blue)}
+.highlighted mark.group-0{border-color:var(--blue);background:rgba(31,111,235,.25)}
+.highlighted mark.group-1{border-color:var(--purple);background:rgba(163,113,247,.2)}
+.highlighted mark.group-2{border-color:var(--orange);background:rgba(210,153,34,.2)}
+.highlighted mark.group-3{border-color:var(--cyan);background:rgba(57,211,83,.15)}
+.match-list{padding:0 14px 14px}
+.match-item{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-top:8px;font-size:.8rem}
+.match-item .match-num{color:var(--green);font-weight:600}
+.match-item .match-value{font-family:monospace;color:var(--text);word-break:break-all}
+.match-item .match-pos{color:var(--dim);font-size:.75rem}
+.match-item .group{margin-top:4px;padding-left:12px;border-left:2px solid var(--border)}
+.match-item .group .group-label{color:var(--purple);font-size:.75rem;font-weight:600}
+.match-item .group .group-val{font-family:monospace;color:var(--text);word-break:break-all}
+.no-match{color:var(--dim);padding:20px 14px;font-size:.85rem;text-align:center}
+.sidebar h3{font-size:.75rem;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.pattern-list{display:flex;flex-direction:column;gap:6px;margin-bottom:32px}
+.pattern-btn{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-size:.8rem;cursor:pointer;text-align:left;transition:border-color .15s}
+.pattern-btn:hover{border-color:var(--blue)}
+.pattern-btn .pattern-name{font-weight:600;margin-bottom:2px}
+.pattern-btn .pattern-regex{font-family:monospace;color:var(--dim);font-size:.7rem;word-break:break-all}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:64px}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px}
+.feature-card .feature-icon{font-size:1.5rem;margin-bottom:10px}
+.feature-card h3{font-size:1rem;margin-bottom:6px}
+.feature-card p{color:var(--dim);font-size:.85rem}
+.faq{margin-top:64px;max-width:720px}
+.faq h2{font-size:1.25rem;margin-bottom:20px}
+.faq-item{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden}
+.faq-q{padding:14px 16px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.faq-q .arrow{transition:transform .2s;color:var(--dim)}
+.faq-item.open .arrow{transform:rotate(180deg)}
+.faq-a{padding:0 16px;max-height:0;overflow:hidden;color:var(--dim);font-size:.9rem;transition:padding .2s,max-height .3s}
+.faq-item.open .faq-a{padding:0 16px 14px;max-height:200px}
+footer{border-top:1px solid var(--border);padding:24px 0;margin-top:64px;text-align:center;font-size:.8rem;color:var(--dim)}
+footer .links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<h1><span class="icon">.*</span> Regex Tester</h1>
+<nav>
+<a href="#features">Features</a>
+<a href="#faq">FAQ</a>
+</nav>
+</div>
+</header>
+<main>
+<div class="container">
+<div class="tool-grid">
+<div>
+<div class="input-group">
+<label for="regex-input">Regular Expression</label>
+<div class="regex-row">
+<input type="text" id="regex-input" placeholder="Enter regex pattern, e.g. \b\w+@\w+\.\w+\b" spellcheck="false" autocomplete="off">
+<button id="copy-btn" onclick="copyRegex()">Copy</button>
+</div>
+<div id="regex-error" class="error-msg" style="display:none"></div>
+<div class="flags">
+<label><input type="checkbox" id="flag-g" checked> g <span style="color:var(--dim)">(global)</span></label>
+<label><input type="checkbox" id="flag-i"> i <span style="color:var(--dim)">(ignore case)</span></label>
+<label><input type="checkbox" id="flag-m"> m <span style="color:var(--dim)">(multiline)</span></label>
+<label><input type="checkbox" id="flag-s"> s <span style="color:var(--dim)">(dotAll)</span></label>
+</div>
+</div>
+<div class="input-group">
+<label for="test-input">Test String</label>
+<textarea id="test-input" placeholder="Enter test string here..." spellcheck="false">The quick brown fox jumps over the lazy dog.
+Contact us at hello@example.com or support@company.org.
+Visit https://www.example.com/path?q=test for more info.
+Phone: +1 (555) 123-4567 or 555.987.6543
+IP addresses: 192.168.1.1 and 10.0.0.255
+Date: 2024-01-15 and 12/25/2023</textarea>
+</div>
+<div class="results-panel">
+<div class="results-header">Match Results — <span id="match-count" class="count">0</span> match(es)</div>
+<div id="highlighted" class="highlighted"></div>
+<div id="match-list" class="match-list"></div>
+</div>
+</div>
+<aside class="sidebar">
+<h3>Common Patterns</h3>
+<div class="pattern-list" id="pattern-list"></div>
+</aside>
+</div>
+<section class="features" id="features">
+<div class="feature-card">
+<div class="feature-icon">🆓</div>
+<h3>100% Free</h3>
+<p>No cost, no limits. Test as many regex patterns as you need.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🔒</div>
+<h3>Private &amp; Secure</h3>
+<p>Everything runs in your browser. Your data never leaves your machine.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚡</div>
+<h3>Live Results</h3>
+<p>Instant match highlighting and group extraction as you type.</p>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🚫</div>
+<h3>No Signup Required</h3>
+<p>Just open and start testing. No accounts, no cookies, no tracking.</p>
+</div>
+</section>
+<section class="faq" id="faq">
+<h2>Frequently Asked Questions</h2>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is Regex Tester free?<span class="arrow">▼</span></div>
+<div class="faq-a">Yes, Regex Tester is completely free with no signup required. It runs entirely in your browser with no server-side processing.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is my data private?<span class="arrow">▼</span></div>
+<div class="faq-a">Absolutely. All regex matching and text processing happens locally in your browser. No data is ever sent to any server. Your patterns and test strings stay on your machine.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What regex flags are supported?<span class="arrow">▼</span></div>
+<div class="faq-a">Regex Tester supports the four most common JavaScript regex flags: g (global — find all matches), i (case-insensitive), m (multiline — ^ and $ match line boundaries), and s (dotAll — . matches newlines).</div>
+</div>
+</section>
+</div>
+</main>
+<footer>
+<div class="container">
+<div class="links">
+<a href="https://json-hero.pages.dev" target="_blank" rel="noopener">JSON Hero</a>
+<a href="https://css-gradient.pages.dev" target="_blank" rel="noopener">CSS Gradient</a>
+<a href="https://devtools-hub.pages.dev" target="_blank" rel="noopener">DevTools Hub</a>
+</div>
+<p>&copy; 2024 Regex Tester. Built for developers.</p>
+</div>
+</footer>
+<script>
+const patterns=[
+{name:"Email",regex:"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}",flags:"gi"},
+{name:"URL",regex:"https?://[\\w\\-]+(\\.[\\w\\-]+)+[/#?]?.*",flags:"gi"},
+{name:"Phone (US)",regex:"(?:\\+?1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}",flags:"g"},
+{name:"Date (YYYY-MM-DD)",regex:"\\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\\d|3[01])",flags:"g"},
+{name:"Date (MM/DD/YYYY)",regex:"(?:0[1-9]|1[0-2])/(?:0[1-9]|[12]\\d|3[01])/\\d{4}",flags:"g"},
+{name:"IPv4 Address",regex:"\\b(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\b",flags:"g"},
+{name:"Hex Color",regex:"#[0-9a-fA-F]{3,8}\\b",flags:"gi"},
+{name:"HTML Tag",regex:"<([a-z][a-z0-9]*)\\b[^>]*>(.*?)</\\1>",flags:"gi"},
+{name:"Number",regex:"-?\\d+(?:\\.\\d+)?",flags:"g"},
+{name:"Words",regex:"\\b\\w+\\b",flags:"g"},
+{name:"Whitespace",regex:"\\s+",flags:"g"},
+{name:"Non-digit",regex:"\\D+",flags:"g"}
+];
+
+const regexInput=document.getElementById("regex-input");
+const testInput=document.getElementById("test-input");
+const flagG=document.getElementById("flag-g");
+const flagI=document.getElementById("flag-i");
+const flagM=document.getElementById("flag-m");
+const flagS=document.getElementById("flag-s");
+const errorEl=document.getElementById("regex-error");
+const matchCountEl=document.getElementById("match-count");
+const highlightedEl=document.getElementById("highlighted");
+const matchListEl=document.getElementById("match-list");
+const patternListEl=document.getElementById("pattern-list");
+const copyBtn=document.getElementById("copy-btn");
+
+patterns.forEach(p=>{
+const btn=document.createElement("button");
+btn.className="pattern-btn";
+btn.innerHTML=`<div class="pattern-name">${p.name}</div><div class="pattern-regex">${p.regex}</div>`;
+btn.addEventListener("click",()=>{
+regexInput.value=p.regex;
+flagG.checked=p.flags.includes("g");
+flagI.checked=p.flags.includes("i");
+flagM.checked=p.flags.includes("m");
+flagS.checked=p.flags.includes("s");
+runTest();
+});
+patternListEl.appendChild(btn);
+});
+
+function escapeHtml(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+function runTest(){
+const pattern=regexInput.value;
+const text=testInput.value;
+errorEl.style.display="none";
+highlightedEl.innerHTML="";
+matchListEl.innerHTML="";
+if(!pattern){highlightedEl.textContent=text;matchCountEl.textContent="0";return}
+let flags="";
+if(flagG.checked)flags+="g";
+if(flagI.checked)flags+="i";
+if(flagM.checked)flags+="m";
+if(flagS.checked)flags+="s";
+let re;
+try{re=new RegExp(pattern,flags)}catch(e){errorEl.textContent=e.message;errorEl.style.display="block";highlightedEl.textContent=text;matchCountEl.textContent="0";return}
+const matches=[];
+if(flags.includes("g")){
+let m;
+while((m=re.exec(text))!==null){
+matches.push({value:m[0],index:m.index,end:m.index+m[0].length,groups:Array.from(m)});
+if(m[0].length===0)re.lastIndex++;
+}
+}else{
+const m=re.exec(text);
+if(m)matches.push({value:m[0],index:m.index,end:m.index+m[0].length,groups:Array.from(m)});
+}
+matchCountEl.textContent=matches.length;
+if(matches.length===0){highlightedEl.innerHTML=escapeHtml(text);return}
+let html="";
+let last=0;
+matches.forEach((match,mi)=>{
+html+=escapeHtml(text.slice(last,match.index));
+html+=`<mark class="group-${mi%4}">${escapeHtml(match.value)}</mark>`;
+last=match.end;
+});
+html+=escapeHtml(text.slice(last));
+highlightedEl.innerHTML=html;
+let listHtml="";
+matches.forEach((match,mi)=>{
+let gHtml="";
+if(match.groups.length>1){
+match.groups.forEach((g,gi)=>{
+if(gi===0)return;
+gHtml+=`<div class="group"><span class="group-label">Group ${gi}:</span> <span class="group-val">${escapeHtml(g||"(undefined)")}</span></div>`;
+});
+}
+listHtml+=`<div class="match-item"><span class="match-num">#${mi+1}</span> <span class="match-value">${escapeHtml(match.value)}</span> <span class="match-pos">[${match.index}–${match.end}]</span>${gHtml}</div>`;
+});
+matchListEl.innerHTML=listHtml;
+}
+
+function copyRegex(){
+navigator.clipboard.writeText(regexInput.value).then(()=>{
+copyBtn.textContent="Copied!";
+copyBtn.classList.add("copied");
+setTimeout(()=>{copyBtn.textContent="Copy";copyBtn.classList.remove("copied")},1500);
+});
+}
+
+regexInput.addEventListener("input",runTest);
+testInput.addEventListener("input",runTest);
+flagG.addEventListener("change",runTest);
+flagI.addEventListener("change",runTest);
+flagM.addEventListener("change",runTest);
+flagS.addEventListener("change",runTest);
+runTest();
+</script>
+</body>
+</html>
